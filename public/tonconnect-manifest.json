@@ -1,7 +1,7 @@
 {
-  "url": "https://tu-app.vercel.app",
+  "url": "https://tapp-zeta.vercel.app/",
   "name": "Mi Telegram dApp",
-  "iconUrl": "https://tu-app.vercel.app/icon.png",
-  "termsOfUseUrl": "https://tu-app.vercel.app/terms",
-  "privacyPolicyUrl": "https://tu-app.vercel.app/privacy"
+  "iconUrl": "https://tapp-zeta.vercel.app/icon.png",
+  "termsOfUseUrl": "https://tapp-zeta.vercel.app/terms",
+  "privacyPolicyUrl": "https://tapp-zeta.vercel.app/privacy"
 }
