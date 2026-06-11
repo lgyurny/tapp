@@ -1,28 +1,34 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    // Inyecta Buffer, process, stream, etc. que necesitan
+    // las librerías Web3 para correr en el navegador
+    nodePolyfills({
+      include: ['buffer', 'process', 'stream', 'util'],
+      globals: {
+        Buffer:  true,
+        global:  true,
+        process: true,
+      },
+    }),
+  ],
   server: {
     port: 5173,
-    host: true, // permite acceso desde red local (probar en móvil)
+    host: true,
   },
   build: {
     outDir: 'dist',
     sourcemap: false,
     rollupOptions: {
       output: {
-        // Separar vendors para mejor caché
         manualChunks: {
-          react:   ['react', 'react-dom'],
-          ton:     ['@tonconnect/ui-react', '@ton/ton'],
-          web3:    ['wagmi', 'viem'],
+          react: ['react', 'react-dom'],
         }
       }
     }
   },
-  define: {
-    // Necesario para algunas librerías Web3
-    global: 'globalThis',
-  }
 })
