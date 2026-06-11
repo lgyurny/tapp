@@ -5,10 +5,8 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills'
 export default defineConfig({
   plugins: [
     react(),
-    // Inyecta Buffer, process, stream, etc. que necesitan
-    // las librerías Web3 para correr en el navegador
     nodePolyfills({
-      include: ['buffer', 'process', 'stream', 'util'],
+      include: ['buffer', 'process', 'stream', 'util', 'crypto'],
       globals: {
         Buffer:  true,
         global:  true,
@@ -23,10 +21,14 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: false,
+    // Silencia el warning del chunk grande
+    chunkSizeWarningLimit: 800,
     rollupOptions: {
       output: {
         manualChunks: {
-          react: ['react', 'react-dom'],
+          react:  ['react', 'react-dom'],
+          ton:    ['@ton/ton', '@ton/core', '@ton/crypto'],
+          wagmi:  ['wagmi', 'viem'],
         }
       }
     }
