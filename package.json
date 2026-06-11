@@ -1,0 +1,32 @@
+{
+  "name": "mi-telegram-dapp",
+  "version": "1.0.0",
+  "description": "Telegram Mini App con Web3 - TON + EVM",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.28.0",
+    "@ton/ton": "^13.9.0",
+    "@tonconnect/ui-react": "^2.0.6",
+    "@web3modal/wagmi": "^4.1.11",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "viem": "^2.9.6",
+    "wagmi": "^2.5.19"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "vite": "^5.2.0"
+  }
+}

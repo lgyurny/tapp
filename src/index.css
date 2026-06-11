@@ -1,0 +1,72 @@
+/* src/index.css */
+/* Reset y estilos globales base para Telegram Mini App */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Colores principales */
+  --bg:       #0A0C10;
+  --surface:  #111318;
+  --border:   #232835;
+  --text:     #E8EAF0;
+  --muted:    #6B7280;
+  --accent:   #4F8EF7;
+  --accent2:  #7C5CFC;
+  --green:    #22D3A0;
+  --orange:   #F59E42;
+  --red:      #F7526A;
+
+  /* Tipografía */
+  font-family: 'Syne', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body, #root {
+  height: 100%;
+  background-color: var(--bg);
+  color: var(--text);
+
+  /* Deshabilitar selección de texto (comportamiento nativo de app) */
+  -webkit-user-select: none;
+  user-select: none;
+
+  /* Deshabilitar el bounce scroll en iOS */
+  overscroll-behavior: none;
+}
+
+/* Ocultar scrollbars manteniendo la funcionalidad */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* Eliminar el highlight azul en tap (móvil) */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
