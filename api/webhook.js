@@ -29,16 +29,34 @@ async function processUpdate(update) {
     const { chat, from, text } = update.message
 
     if (text === '/start') {
-      await sendTelegramMessage(chat.id, {
-        text: `👋 Hola ${from.first_name}!\n\nBienvenido a la dApp. Toca el botón para comenzar.`,
-        reply_markup: {
-          inline_keyboard: [[{
-            text: '🚀 Abrir dApp',
+    // 1. Configurar el menu button para este usuario
+    await fetch(
+      `https://api.telegram.org/bot${process.env.BOT_TOKEN}/setChatMenuButton`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: chat.id,
+          menu_button: {
+            type:    'web_app',
+            text:    '🚀 Abrir App',
             web_app: { url: process.env.VITE_APP_URL }
-          }]]
-        }
-      })
-      return
+          }
+        })
+      }
+    )
+
+    // 2. Enviar mensaje de bienvenida
+    await sendTelegramMessage(chat.id, {
+      text: `👋 Hola ${from.first_name}! Ya puedes acceder a la app desde el botón de abajo.`,
+      reply_markup: {
+        inline_keyboard: [[{
+          text:    '🚀 Abrir dApp',
+          web_app: { url: process.env.VITE_APP_URL }
+        }]]
+      }
+    })
+    return
     }
 
     if (text === '/help') {
