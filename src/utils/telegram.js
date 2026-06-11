@@ -73,9 +73,15 @@ export const getTWA = () => window.Telegram?.WebApp || MOCK_TWA
 // ─────────────────────────────────────────────────────────────
 export function initTelegramApp() {
   const twa = getTWA()
-  twa.expand()                      // expandir a pantalla completa
-  twa.ready()                       // ocultar pantalla de carga nativa
-  twa.enableClosingConfirmation()   // pedir confirmación al cerrar
+  twa.expand()
+  twa.ready()
+
+  // Verificar versión antes de llamar funciones modernas
+  const version = parseFloat(twa.version || '6.0')
+  if (version >= 6.2) {
+    twa.enableClosingConfirmation()
+  }
+
   return twa
 }
 
