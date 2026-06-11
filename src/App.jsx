@@ -152,280 +152,291 @@ export default function App() {
       {/* Contenido principal */}
       <main style={{ flex: 1, overflowY: 'auto', paddingBottom: connected ? '80px' : '0' }}>
         {!connected ? (
-          // ── Pantalla de conexión ────────────────────────────
-          <div style={{
-            display:        'flex',
-            flexDirection:  'column',
-            alignItems:     'center',
-            justifyContent: 'center',
-            padding:        '40px 24px',
-            textAlign:      'center',
-            minHeight:      'calc(100vh - 65px)',
-          }}>
-            <div style={{
-              width:        '80px',
-              height:       '80px',
-              background:   'linear-gradient(135deg, #4F8EF7, #7C5CFC)',
-              borderRadius: '24px',
-              display:      'flex',
-              alignItems:   'center',
-              justifyContent: 'center',
-              marginBottom: '24px',
-              fontSize:     '36px',
-            }}>
-              🔐
-            </div>
-            <h1 style={{ fontSize: '26px', fontWeight: 800, marginBottom: '10px' }}>
-              Hola, {user?.first_name || 'Dev'} 👋
-            </h1>
-            <p style={{ color: '#6B7280', marginBottom: '32px', maxWidth: '280px', lineHeight: 1.6 }}>
-              Conecta tu wallet para acceder. Tus claves nunca salen de tu dispositivo.
-            </p>
-
-            {/* Opciones de wallet */}
-            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {[
-                { type: 'ton', icon: '💎', name: 'Tonkeeper',  desc: 'TON · TON Connect v2' },
-                { type: 'evm', icon: '🦊', name: 'MetaMask',   desc: 'EVM · WalletConnect v2' },
-              ].map(w => (
-                <button
-                  key={w.type}
-                  onClick={() => handleConnect(w.type)}
-                  disabled={loading}
-                  style={{
-                    background:   '#111318',
-                    border:       '1px solid #232835',
-                    borderRadius: '14px',
-                    padding:      '14px 18px',
-                    display:      'flex',
-                    alignItems:   'center',
-                    gap:          '14px',
-                    cursor:       loading ? 'not-allowed' : 'pointer',
-                    color:        '#E8EAF0',
-                    textAlign:    'left',
-                    transition:   'border-color 0.2s',
-                    opacity:      loading ? 0.7 : 1,
-                  }}
-                >
-                  <span style={{ fontSize: '24px' }}>{w.icon}</span>
-                  <div>
-                    <div style={{ fontWeight: 700, fontSize: '14px' }}>{w.name}</div>
-                    <div style={{ fontSize: '11px', color: '#6B7280', fontFamily: 'monospace' }}>{w.desc}</div>
-                  </div>
-                  <span style={{ marginLeft: 'auto', color: '#6B7280' }}>→</span>
-                </button>
-              ))}
-            </div>
-
-            {!isRealTelegram && (
-              <p style={{ marginTop: '20px', fontSize: '10px', color: '#6B7280', fontFamily: 'monospace' }}>
-                ⚠️ Modo desarrollo — SDK de Telegram simulado
-              </p>
-            )}
-          </div>
         ) : (
-          // ── App principal (después de conectar) ─────────────
-          <div style={{ padding: '20px' }}>
-            {/* Portfolio card */}
-            <div style={{
-              background:   'linear-gradient(135deg, #0F1420, #131926)',
-              border:       '1px solid #2E3545',
-              borderRadius: '20px',
-              padding:      '22px',
-              marginBottom: '20px',
-            }}>
-              <div style={{ marginBottom: '16px' }}>
-                <div style={{ fontSize: '11px', color: '#6B7280', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
-                  Portfolio Total
-                </div>
-                <div style={{ fontSize: '32px', fontWeight: 800, letterSpacing: '-1px' }}>
-                  {userData ? `$${userData.portfolio?.totalUsd}` : '$4,821.36'}
-                </div>
-                <div style={{ fontSize: '13px', color: '#6B7280', fontFamily: 'monospace' }}>
-                  {walletType === 'ton' ? '≈ 1,150 TON' : '≈ 1.94 ETH'}
-                </div>
-              </div>
-              <div style={{
-                background:   'rgba(255,255,255,0.04)',
-                border:       '1px solid #232835',
-                borderRadius: '8px',
-                padding:      '8px 12px',
-                fontFamily:   'monospace',
-                fontSize:     '11px',
-                color:        '#6B7280',
-                cursor:       'pointer',
-                display:      'flex',
-                justifyContent: 'space-between',
-              }}
-                onClick={() => showToast('📋 Dirección copiada')}
-              >
-                <span>{walletType === 'ton' ? 'EQBx2...k9mN' : '0x4A3f...8c2D'}</span>
-                <span>⎘</span>
-              </div>
-            </div>
+  <div style={{ padding: '20px' }}>
 
-            {/* Acciones rápidas */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', marginBottom: '24px' }}>
-              {[
-                { label: 'Stake', icon: '⚡', action: () => showToast('🔒 Función de stake') },
-                { label: 'Swap',  icon: '🔄', action: () => showToast('🔄 Próximamente') },
-                { label: 'Send',  icon: '📤', action: () => showToast('📤 Próximamente') },
-                { label: 'Buy',   icon: '💳', action: () => showToast('💳 Próximamente') },
-              ].map(a => (
-                <button
-                  key={a.label}
-                  onClick={() => { haptic.impact('light'); a.action() }}
-                  style={{
-                    background:    '#111318',
-                    border:        '1px solid #232835',
-                    borderRadius:  '12px',
-                    padding:       '12px 8px',
-                    display:       'flex',
-                    flexDirection: 'column',
-                    alignItems:    'center',
-                    gap:           '6px',
-                    cursor:        'pointer',
-                    color:         '#E8EAF0',
-                  }}
-                >
-                  <span style={{ fontSize: '20px' }}>{a.icon}</span>
-                  <span style={{ fontSize: '10px', fontWeight: 700, color: '#6B7280' }}>{a.label}</span>
-                </button>
-              ))}
+    {/* ── HOME ─────────────────────────────────── */}
+    {tab === 'home' && (
+      <>
+        {/* Portfolio card */}
+        <div style={{
+          background:   'linear-gradient(135deg, #0F1420, #131926)',
+          border:       '1px solid #2E3545',
+          borderRadius: '20px',
+          padding:      '22px',
+          marginBottom: '20px',
+        }}>
+          <div style={{ marginBottom: '16px' }}>
+            <div style={{ fontSize: '11px', color: '#6B7280', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
+              Portfolio Total
             </div>
-
-            {/* Stakes activos */}
-            <div style={{ marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: '11px', color: '#6B7280', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
-                Posiciones
-              </span>
-              <span style={{ fontSize: '11px', color: '#4F8EF7', cursor: 'pointer', fontFamily: 'monospace' }}>
-                Reclamar todo →
-              </span>
+            <div style={{ fontSize: '32px', fontWeight: 800, letterSpacing: '-1px' }}>
+              {userData ? `$${userData.portfolio?.totalUsd}` : '$4,821.36'}
             </div>
-            {MOCK_STAKES.map(s => (
-              <div key={s.id} style={{
-                background:   '#111318',
-                border:       '1px solid #232835',
-                borderRadius: '14px',
-                padding:      '16px',
-                marginBottom: '10px',
-                cursor:       'pointer',
-                borderTop:    '2px solid #4F8EF7',
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <div>
-                    <div style={{ fontSize: '11px', color: '#6B7280', fontFamily: 'monospace', marginBottom: '2px' }}>
-                      {s.token} · Staking
-                    </div>
-                    <div style={{ fontSize: '20px', fontWeight: 800, fontFamily: 'monospace' }}>
-                      {s.amount} <span style={{ fontSize: '14px', color: '#6B7280' }}>{s.token}</span>
-                    </div>
-                  </div>
-                  <div style={{
-                    background:   'rgba(34,211,160,0.1)',
-                    border:       '1px solid rgba(34,211,160,0.2)',
-                    color:        '#22D3A0',
-                    borderRadius: '6px',
-                    padding:      '3px 8px',
-                    fontSize:     '11px',
-                    fontWeight:   700,
-                    fontFamily:   'monospace',
-                  }}>
-                    {s.apy} APY
-                  </div>
-                </div>
-                <div style={{
-                  display:      'flex',
-                  gap:          '16px',
-                  marginTop:    '10px',
-                  paddingTop:   '10px',
-                  borderTop:    '1px solid #232835',
-                }}>
-                  <div>
-                    <div style={{ fontSize: '10px', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '1px', fontFamily: 'monospace' }}>Duración</div>
-                    <div style={{ fontSize: '13px', fontWeight: 700, fontFamily: 'monospace' }}>{s.since}</div>
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '10px', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '1px', fontFamily: 'monospace' }}>Rewards</div>
-                    <div style={{ fontSize: '13px', fontWeight: 700, fontFamily: 'monospace', color: '#22D3A0' }}>+{s.rewards} {s.token}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-
-            {/* Historial */}
-            <div style={{ marginTop: '20px', marginBottom: '8px' }}>
-              <span style={{ fontSize: '11px', color: '#6B7280', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
-                Historial
-              </span>
+            <div style={{ fontSize: '13px', color: '#6B7280', fontFamily: 'monospace' }}>
+              {walletType === 'ton' ? '≈ 1,150 TON' : '≈ 1.94 ETH'}
             </div>
-            {MOCK_TX_HISTORY.map((tx, i) => (
-              <div key={i} style={{
-                display:     'flex',
-                alignItems:  'center',
-                gap:         '12px',
-                padding:     '12px 0',
-                borderBottom: '1px solid #232835',
-                cursor:      'pointer',
-              }}>
-                <div style={{
-                  width:        '36px',
-                  height:       '36px',
-                  borderRadius: '10px',
-                  background:   '#181C24',
-                  border:       '1px solid #232835',
-                  display:      'flex',
-                  alignItems:   'center',
-                  justifyContent: 'center',
-                  fontSize:     '16px',
-                  flexShrink:   0,
-                }}>
-                  {tx.type === 'Stake' ? '⚡' : tx.type === 'Swap' ? '🔄' : '🎁'}
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '13px', fontWeight: 700 }}>{tx.type}</div>
-                  <div style={{ fontSize: '10px', color: '#6B7280', fontFamily: 'monospace' }}>{tx.hash}</div>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '12px', fontWeight: 700, fontFamily: 'monospace' }}>{tx.amount}</div>
-                  <div style={{
-                    display:      'inline-block',
-                    fontSize:     '9px',
-                    fontFamily:   'monospace',
-                    fontWeight:   700,
-                    padding:      '2px 6px',
-                    borderRadius: '20px',
-                    background:   tx.status === 'confirmed' ? 'rgba(34,211,160,0.12)' : 'rgba(245,158,66,0.12)',
-                    color:        tx.status === 'confirmed' ? '#22D3A0' : '#F59E42',
-                    border:       `1px solid ${tx.status === 'confirmed' ? 'rgba(34,211,160,0.2)' : 'rgba(245,158,66,0.2)'}`,
-                  }}>
-                    {tx.status}
-                  </div>
-                </div>
-              </div>
-            ))}
-
-            {/* Botón desconectar */}
-            <button
-              onClick={handleDisconnect}
-              style={{
-                marginTop:    '24px',
-                width:        '100%',
-                background:   'transparent',
-                border:       '1px solid rgba(247,82,106,0.3)',
-                borderRadius: '12px',
-                padding:      '12px',
-                color:        '#F7526A',
-                fontSize:     '13px',
-                fontWeight:   700,
-                cursor:       'pointer',
-              }}
-            >
-              Desconectar Wallet
-            </button>
           </div>
-        )}
+          <div
+            onClick={() => showToast('📋 Dirección copiada')}
+            style={{
+              background:     'rgba(255,255,255,0.04)',
+              border:         '1px solid #232835',
+              borderRadius:   '8px',
+              padding:        '8px 12px',
+              fontFamily:     'monospace',
+              fontSize:       '11px',
+              color:          '#6B7280',
+              cursor:         'pointer',
+              display:        'flex',
+              justifyContent: 'space-between',
+            }}
+          >
+            <span>{walletType === 'ton' ? 'EQBx2...k9mN' : '0x4A3f...8c2D'}</span>
+            <span>⎘</span>
+          </div>
+        </div>
+
+        {/* Acciones rápidas */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', marginBottom: '24px' }}>
+          {[
+            { label: 'Stake', icon: '⚡', action: () => setTab('stake') },
+            { label: 'Swap',  icon: '🔄', action: () => setTab('swap')  },
+            { label: 'Send',  icon: '📤', action: () => showToast('📤 Próximamente') },
+            { label: 'Buy',   icon: '💳', action: () => showToast('💳 Próximamente') },
+          ].map(a => (
+            <button key={a.label} onClick={() => { haptic.impact('light'); a.action() }}
+              style={{
+                background:    '#111318',
+                border:        '1px solid #232835',
+                borderRadius:  '12px',
+                padding:       '12px 8px',
+                display:       'flex',
+                flexDirection: 'column',
+                alignItems:    'center',
+                gap:           '6px',
+                cursor:        'pointer',
+                color:         '#E8EAF0',
+              }}>
+              <span style={{ fontSize: '20px' }}>{a.icon}</span>
+              <span style={{ fontSize: '10px', fontWeight: 700, color: '#6B7280' }}>{a.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Stakes activos */}
+        <div style={{ marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontSize: '11px', color: '#6B7280', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.5px' }}>Posiciones</span>
+          <span style={{ fontSize: '11px', color: '#4F8EF7', cursor: 'pointer', fontFamily: 'monospace' }}>Reclamar todo →</span>
+        </div>
+        {MOCK_STAKES.map(s => (
+          <div key={s.id} style={{
+            background: '#111318', border: '1px solid #232835',
+            borderRadius: '14px', padding: '16px', marginBottom: '10px',
+            cursor: 'pointer', borderTop: '2px solid #4F8EF7',
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div>
+                <div style={{ fontSize: '11px', color: '#6B7280', fontFamily: 'monospace', marginBottom: '2px' }}>{s.token} · Staking</div>
+                <div style={{ fontSize: '20px', fontWeight: 800, fontFamily: 'monospace' }}>
+                  {s.amount} <span style={{ fontSize: '14px', color: '#6B7280' }}>{s.token}</span>
+                </div>
+              </div>
+              <div style={{ background: 'rgba(34,211,160,0.1)', border: '1px solid rgba(34,211,160,0.2)', color: '#22D3A0', borderRadius: '6px', padding: '3px 8px', fontSize: '11px', fontWeight: 700, fontFamily: 'monospace' }}>
+                {s.apy} APY
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '16px', marginTop: '10px', paddingTop: '10px', borderTop: '1px solid #232835' }}>
+              <div>
+                <div style={{ fontSize: '10px', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '1px', fontFamily: 'monospace' }}>Duración</div>
+                <div style={{ fontSize: '13px', fontWeight: 700, fontFamily: 'monospace' }}>{s.since}</div>
+              </div>
+              <div>
+                <div style={{ fontSize: '10px', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '1px', fontFamily: 'monospace' }}>Rewards</div>
+                <div style={{ fontSize: '13px', fontWeight: 700, fontFamily: 'monospace', color: '#22D3A0' }}>+{s.rewards} {s.token}</div>
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {/* Historial */}
+        <div style={{ marginTop: '20px', marginBottom: '8px' }}>
+          <span style={{ fontSize: '11px', color: '#6B7280', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.5px' }}>Historial</span>
+        </div>
+        {MOCK_TX_HISTORY.map((tx, i) => (
+          <div key={i} onClick={() => showToast(`🔗 ${tx.hash}`)}
+            style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 0', borderBottom: '1px solid #232835', cursor: 'pointer' }}>
+            <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#181C24', border: '1px solid #232835', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>
+              {tx.type === 'Stake' ? '⚡' : tx.type === 'Swap' ? '🔄' : '🎁'}
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: '13px', fontWeight: 700 }}>{tx.type}</div>
+              <div style={{ fontSize: '10px', color: '#6B7280', fontFamily: 'monospace' }}>{tx.hash}</div>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ fontSize: '12px', fontWeight: 700, fontFamily: 'monospace' }}>{tx.amount}</div>
+              <div style={{ display: 'inline-block', fontSize: '9px', fontFamily: 'monospace', fontWeight: 700, padding: '2px 6px', borderRadius: '20px', background: tx.status === 'confirmed' ? 'rgba(34,211,160,0.12)' : 'rgba(245,158,66,0.12)', color: tx.status === 'confirmed' ? '#22D3A0' : '#F59E42', border: `1px solid ${tx.status === 'confirmed' ? 'rgba(34,211,160,0.2)' : 'rgba(245,158,66,0.2)'}` }}>
+                {tx.status}
+              </div>
+            </div>
+          </div>
+        ))}
+      </>
+    )}
+
+    {/* ── STAKE ────────────────────────────────── */}
+    {tab === 'stake' && (
+      <>
+        <div style={{ fontSize: '20px', fontWeight: 800, marginBottom: '6px' }}>⚡ Staking</div>
+        <div style={{ fontSize: '12px', color: '#6B7280', marginBottom: '24px', fontFamily: 'monospace' }}>
+          Bloquea tus tokens y genera recompensas diarias
+        </div>
+
+        {/* APY cards */}
+        {[
+          { token: 'TON', apy: '12.4%', min: '10 TON',   icon: '💎', color: '#0098EA' },
+          { token: 'ETH', apy: '8.1%',  min: '0.01 ETH', icon: 'Ξ',  color: '#627EEA' },
+        ].map(p => (
+          <div key={p.token} onClick={() => showToast(`💰 Stake de ${p.token} próximamente`)}
+            style={{ background: '#111318', border: '1px solid #232835', borderRadius: '14px', padding: '18px', marginBottom: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: `${p.color}22`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', flexShrink: 0 }}>
+              {p.icon}
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 700, fontSize: '15px' }}>{p.token} Staking</div>
+              <div style={{ fontSize: '11px', color: '#6B7280', fontFamily: 'monospace' }}>Mínimo: {p.min}</div>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ fontSize: '18px', fontWeight: 800, color: '#22D3A0', fontFamily: 'monospace' }}>{p.apy}</div>
+              <div style={{ fontSize: '10px', color: '#6B7280', fontFamily: 'monospace' }}>APY</div>
+            </div>
+          </div>
+        ))}
+
+        {/* Posiciones activas */}
+        <div style={{ fontSize: '11px', color: '#6B7280', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1.5px', margin: '20px 0 12px' }}>
+          Tus posiciones activas
+        </div>
+        {MOCK_STAKES.map(s => (
+          <div key={s.id} style={{ background: '#111318', border: '1px solid #232835', borderRadius: '12px', padding: '14px', marginBottom: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <div style={{ fontWeight: 700, fontFamily: 'monospace' }}>{s.amount} {s.token}</div>
+              <div style={{ fontSize: '11px', color: '#6B7280', fontFamily: 'monospace' }}>{s.since} activo</div>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ color: '#22D3A0', fontWeight: 700, fontFamily: 'monospace', fontSize: '13px' }}>+{s.rewards} {s.token}</div>
+              <div style={{ fontSize: '10px', color: '#6B7280', fontFamily: 'monospace' }}>rewards</div>
+            </div>
+          </div>
+        ))}
+      </>
+    )}
+
+    {/* ── SWAP ─────────────────────────────────── */}
+    {tab === 'swap' && (
+      <>
+        <div style={{ fontSize: '20px', fontWeight: 800, marginBottom: '6px' }}>🔄 Swap</div>
+        <div style={{ fontSize: '12px', color: '#6B7280', marginBottom: '24px', fontFamily: 'monospace' }}>
+          Intercambia tokens al instante
+        </div>
+
+        <div style={{ background: '#111318', border: '1px solid #232835', borderRadius: '14px', padding: '18px', marginBottom: '10px' }}>
+          <div style={{ fontSize: '11px', color: '#6B7280', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Envías</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ fontSize: '28px' }}>💎</div>
+            <div>
+              <div style={{ fontWeight: 700 }}>TON</div>
+              <div style={{ fontSize: '11px', color: '#6B7280', fontFamily: 'monospace' }}>Balance: 1,150.00</div>
+            </div>
+            <div style={{ marginLeft: 'auto', fontSize: '22px', fontWeight: 800, fontFamily: 'monospace', color: '#6B7280' }}>—</div>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'center', margin: '4px 0' }}>
+          <div style={{ width: '32px', height: '32px', background: '#181C24', border: '1px solid #232835', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '16px' }}
+            onClick={() => showToast('🔄 Tokens intercambiados')}>
+            ↕
+          </div>
+        </div>
+
+        <div style={{ background: '#111318', border: '1px solid #232835', borderRadius: '14px', padding: '18px', marginBottom: '20px' }}>
+          <div style={{ fontSize: '11px', color: '#6B7280', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Recibes</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ fontSize: '28px' }}>💵</div>
+            <div>
+              <div style={{ fontWeight: 700 }}>USDC</div>
+              <div style={{ fontSize: '11px', color: '#6B7280', fontFamily: 'monospace' }}>Balance: 820.00</div>
+            </div>
+            <div style={{ marginLeft: 'auto', fontSize: '22px', fontWeight: 800, fontFamily: 'monospace', color: '#6B7280' }}>—</div>
+          </div>
+        </div>
+
+        <div style={{ background: 'rgba(79,142,247,0.08)', border: '1px solid rgba(79,142,247,0.15)', borderRadius: '10px', padding: '12px 14px', marginBottom: '20px', fontSize: '11px', color: '#6B7280', fontFamily: 'monospace', lineHeight: 1.7 }}>
+          <div>Tasa estimada: <span style={{ color: '#E8EAF0' }}>1 TON ≈ 3.28 USDC</span></div>
+          <div>Fee de red: <span style={{ color: '#E8EAF0' }}>~0.01 TON</span></div>
+          <div>Slippage: <span style={{ color: '#E8EAF0' }}>0.5%</span></div>
+        </div>
+
+        <button onClick={() => showToast('🔄 Swap próximamente')}
+          style={{ width: '100%', padding: '14px', background: 'linear-gradient(135deg, #4F8EF7, #7C5CFC)', border: 'none', borderRadius: '12px', color: 'white', fontSize: '14px', fontWeight: 700, cursor: 'pointer' }}>
+          Confirmar Swap
+        </button>
+      </>
+    )}
+
+    {/* ── CONFIG ───────────────────────────────── */}
+    {tab === 'opts' && (
+      <>
+        <div style={{ fontSize: '20px', fontWeight: 800, marginBottom: '6px' }}>⚙️ Configuración</div>
+        <div style={{ fontSize: '11px', color: '#6B7280', fontFamily: 'monospace', marginBottom: '24px' }}>
+          TG ID: {user?.id} · @{user?.username}
+        </div>
+
+        {/* Info wallet */}
+        <div style={{ background: '#111318', border: '1px solid #232835', borderRadius: '14px', padding: '16px', marginBottom: '16px' }}>
+          <div style={{ fontSize: '11px', color: '#6B7280', fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Wallet conectada</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>{walletType === 'ton' ? '💎' : '🦊'}</span>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '14px' }}>{walletType === 'ton' ? 'Tonkeeper' : 'MetaMask'}</div>
+              <div style={{ fontSize: '11px', color: '#6B7280', fontFamily: 'monospace' }}>
+                {walletType === 'ton' ? 'EQBx2...k9mN' : '0x4A3f...8c2D'}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Items de config */}
+        {[
+          { icon: '🔔', label: 'Notificaciones', sub: 'Push via Bot API' },
+          { icon: '🌐', label: 'Red',            sub: walletType === 'ton' ? 'TON Mainnet' : 'Polygon' },
+          { icon: '🔒', label: 'Seguridad',      sub: 'HMAC-SHA256 activo' },
+          { icon: '📄', label: 'Términos',        sub: 'Ver términos de uso' },
+        ].map(item => (
+          <div key={item.label} onClick={() => showToast(`⚙️ ${item.label}`)}
+            style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 0', borderBottom: '1px solid #232835', cursor: 'pointer' }}>
+            <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#181C24', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>
+              {item.icon}
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 600, fontSize: '13px' }}>{item.label}</div>
+              <div style={{ fontSize: '11px', color: '#6B7280', fontFamily: 'monospace' }}>{item.sub}</div>
+            </div>
+            <span style={{ color: '#6B7280' }}>›</span>
+          </div>
+        ))}
+
+        {/* Botón desconectar */}
+        <button onClick={handleDisconnect}
+          style={{ marginTop: '24px', width: '100%', background: 'transparent', border: '1px solid rgba(247,82,106,0.3)', borderRadius: '12px', padding: '12px', color: '#F7526A', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}>
+          Desconectar Wallet
+        </button>
+      </>
+    )}
+
+  </div>
+)}
+
       </main>
 
       {/* Bottom navigation */}
